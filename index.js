@@ -2,7 +2,6 @@ const grid = document.querySelector(".grid");
 const colorInput = document.querySelector("input[type=color]");
 const buttons = document.querySelectorAll("button");
 
-// Create elements inside grid
 let createdEl;
 for (let i = 0; i <= 80; i++) {
   createdEl = document.createElement("div");
@@ -12,13 +11,8 @@ for (let i = 0; i <= 80; i++) {
   grid.appendChild(createdEl);
 }
 
-// Get individual grid elements
-const boxes = document.querySelectorAll(".box");
-
-// coloring modes
 let mode = "default";
 
-// Change modes depending on which button is clicked
 buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
     const activeButton = document.querySelector("button#active");
@@ -37,14 +31,14 @@ buttons.forEach((button) => {
   });
 });
 
-// Get slider value
 let inputVal;
 colorInput.addEventListener("input", (e) => {
   inputVal = colorInput.value;
   mode = "color";
 });
 
-// Set grid element's background depending on mode
+const boxes = document.querySelectorAll(".box");
+
 boxes.forEach((box) => {
   box.addEventListener("mouseover", (e) => {
     if (mode === "default") {
@@ -53,11 +47,12 @@ boxes.forEach((box) => {
       box.style.backgroundColor = `rgb(${randomRgb().join(",")})`;
     } else if (mode === "eraser") {
       box.style.backgroundColor = "#fff";
+    } else if (mode === "color") {
+      box.style.backgroundColor = inputVal;
     }
   });
 });
 
-// Generate a random color to use as grid element background
 function randomInteger(num) {
   return Math.floor(Math.random() * num);
 }
@@ -69,7 +64,6 @@ function randomRgb() {
   return [r, g, b];
 }
 
-// Reset grid element background
 function resetBoxBg() {
   boxes.forEach((box) => (box.style.backgroundColor = "transparent"));
 }
