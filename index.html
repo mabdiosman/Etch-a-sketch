@@ -6,15 +6,17 @@
     <link rel="stylesheet" href="style.css" />
     <title>Etch a sketch</title>
   </head>
-  <body>
-    <div class="container">
-      <div class="grid"></div>
-      <div class="options">
+  <body class="flex">
+    <div class="container flex">
+      <div class="grid-container flex"></div>
+      <div class="options flex">
         <input type="color" name="" id="color" />
         <button class="default" id="active">Default color</button>
         <button class="random">Random color</button>
         <button class="eraser">Eraser</button>
         <button class="reset">Reset</button>
+        <label for="size">16x16</label>
+        <input type="range" name="size" id="size" min="4" max="64" />
       </div>
     </div>
     <script src="./index.js"></script>

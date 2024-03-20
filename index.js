@@ -1,18 +1,63 @@
-const grid = document.querySelector(".grid");
+const grid = document.querySelector(".grid-container");
 const colorInput = document.querySelector("input[type=color]");
 const buttons = document.querySelectorAll("button");
+let gridNumber = 16;
+let row;
+function createGrid(size) {
+  grid.innerHTML = "";
+  for (let i = 0; i < size; i++) {
+    row = document.createElement("div");
+    row.classList.add("row");
+    row.setAttribute("draggable", "false");
+    grid.appendChild(row);
+    for (let j = 0; j < size; j++) {
+      box = document.createElement("div");
+      box.classList.add("box");
+      box.setAttribute("draggable", "false");
+      row.appendChild(box);
+    }
+  }
 
-let createdEl;
-for (let i = 0; i <= 80; i++) {
-  createdEl = document.createElement("div");
-  createdEl.classList.add("box");
-  createdEl.style.minWidth = "40px";
-  createdEl.style.minHeight = "40px";
-  grid.appendChild(createdEl);
+  const boxes = document.querySelectorAll(".box");
+
+  boxes.forEach((box) => {
+    box.addEventListener("mouseover", (e) => {
+      if (mode === "default") {
+        box.style.backgroundColor = "#333";
+      } else if (mode === "random") {
+        box.style.backgroundColor = `rgb(${randomRgb().join(",")})`;
+      } else if (mode === "eraser") {
+        box.style.backgroundColor = "#fff";
+      } else if (mode === "color") {
+        box.style.backgroundColor = inputVal;
+      }
+    });
+  });
 }
 
-let mode = "default";
+createGrid(gridNumber);
 
+// Resize grid
+const sizeInput = document.querySelector("input[type=range]");
+const sizeInputLabel = document.querySelector("label");
+sizeInput.value = size;
+sizeInput.addEventListener("input", () => {
+  sizeInputLabel.textContent = `${sizeInput.value}x${sizeInput.value}`;
+});
+
+sizeInput.addEventListener("change", () => {
+  createGrid(sizeInput.value);
+});
+
+let mode = "default";
+let mouseDown;
+grid.addEventListener("mousedown", () => {
+  mouseDown = true;
+});
+
+grid.addEventListener("mouseup", () => {
+  mouseDown = false;
+});
 buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
     const activeButton = document.querySelector("button#active");
@@ -37,22 +82,6 @@ colorInput.addEventListener("input", (e) => {
   mode = "color";
 });
 
-const boxes = document.querySelectorAll(".box");
-
-boxes.forEach((box) => {
-  box.addEventListener("mouseover", (e) => {
-    if (mode === "default") {
-      box.style.backgroundColor = "#333";
-    } else if (mode === "random") {
-      box.style.backgroundColor = `rgb(${randomRgb().join(",")})`;
-    } else if (mode === "eraser") {
-      box.style.backgroundColor = "#fff";
-    } else if (mode === "color") {
-      box.style.backgroundColor = inputVal;
-    }
-  });
-});
-
 function randomInteger(num) {
   return Math.floor(Math.random() * num);
 }
@@ -65,5 +94,6 @@ function randomRgb() {
 }
 
 function resetBoxBg() {
-  boxes.forEach((box) => (box.style.backgroundColor = "transparent"));
+  const boxes = document.querySelectorAll(".box");
+  boxes.forEach((box) => (box.style.backgroundColor = ""));
 }
